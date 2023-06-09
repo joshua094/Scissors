@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
-const nanoid = require('nanoid')
+import mongoose from 'mongoose'
+import { nanoid } from 'nanoid'
 
-const scissorSchema = new mongoose.Schema({
+const shortUrlSchema = new mongoose.Schema({
     full: {
         type: String,
         required: true
@@ -19,4 +19,4 @@ const scissorSchema = new mongoose.Schema({
 })
 
 
-module.exports = mongoose.model('Scissors', scissorSchema)
+export default  mongoose.model('ShortUrl', shortUrlSchema)
