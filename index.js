@@ -2,12 +2,15 @@ import mongoose from 'mongoose'
 import express  from 'express'
 import ShortUrl from './models/shortUrl.js'
 import dotenv from 'dotenv'
+import validUrl from 'valid-url'
+import shortid from 'shortid'
 dotenv.config()
 
 const app = express()
 
 mongoose.connect('mongodb://localhost/shortUrls', {
     useNewUrlParser: true, useUnifiedTopology: true
+    
 })
 
 app.use(express.json());
@@ -23,11 +26,7 @@ app.get('/', async (req, res) => {
     res.render('index', { shortUrls: shortUrls })
 })
 
-app.post('/shortUrl', async (req, res) => {
-    await ShortUrl.create({ full: req.body.fullUrl })
 
-    res.redirect('/')
-})
 
 app.get('/:shortUrl', async (req, res) => {
     const shortUrl = await ShortUrl.findOne({ short: req.params.shortUrl })
@@ -37,6 +36,39 @@ app.get('/:shortUrl', async (req, res) => {
     shortUrl.save()
 
     res.redirect(shortUrl.full)
+})
+
+
+app.post('/shortUrl', async (req, res) => {
+    await ShortUrl.create({ full: req.body.fullUrl })
+
+    // const  { fullUrl }  = req.body.fullUrl
+
+    // ///create url code
+    // const urlCode = shortid.generate();
+
+    // if (validUrl.isUri(fullUrl)) {
+    //     try {
+    //         let url = await ShortUrl.findOne({ fullUrl })
+
+    //         if (url) {
+    //             res.redirect('/')
+    //         }
+    //         else {
+    //             url = new ShortUrl({
+    //                 full,
+    //                 short,
+    //                 date: new Date()
+    //             })
+                
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //         res.status(500).json('Server Error')
+    //     }
+    // }
+    res.redirect('/')
+    
 })
 
 const PORT = 4000 || process.env.PORT
